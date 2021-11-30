@@ -1,5 +1,4 @@
 # Weather Project
-Author: Cesar Nunez Rodriguez
 
 ## outline:
 

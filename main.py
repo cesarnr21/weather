@@ -22,7 +22,11 @@ class taskSelector:
     # timePeriod
     # task
 
-
+class weather:
+    avgTemperature
+    # mood:
+        # raining, cloudly, snowing, 
+    # any hazards??: tornado, flooding
 
 print("Available Functions:")
 print("Report \nPlot \nOther")

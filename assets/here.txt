@@ -1,0 +1,13 @@
+images that need to be added:
+
+day and night:
+- clear
+- cloudy
+- raining
+- snowing
+- fog
+
+others:
+- sunny
+
+

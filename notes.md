@@ -6,3 +6,4 @@
 
 ## Some examples:
 - [git repo](https://github.com/mzdhr/weather)
+- [another](https://github.com/ChillarAnand/Weather-on-Terminal)

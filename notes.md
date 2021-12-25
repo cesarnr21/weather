@@ -1,4 +1,15 @@
 
+## Plan
+For main:
+- Decide on a weather API
+- Find a way to automatically get location
+- Add functions when calling the scrip
+
+Other:
+- Create another file to take care of all the formatting and displaying the data
+- need to find image library
+
+
 ## Potential Weather APIs
 - Weather Underground
 - [Open Weather](https://openweathermap.org/)

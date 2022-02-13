@@ -5,16 +5,23 @@
 
 import sys
 
+__version__ = '1.0'
+
 def create_target():
     args = sys.argv
     args.pop(0)
-    if len(args) = 0:
-        get_ip()
+    if len(args) == 0:
+        get_ip_location()
     else:
+        commands = {
+            "--help": help,
+            "--config": config,
+        }
+
         pass # switch-function: https://www.geeksforgeeks.org/switch-case-in-python-replacement/
     pass
 
-def get_location(target):
+def get_ip_location(target):
     """
     In case no location is selected, find the IP address location and use that instead
     """
@@ -26,6 +33,7 @@ def get_data(location):
     """
     Uses API to find weather data for the selected location
     """
+    print(location)
     pass
 
 def main():

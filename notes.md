@@ -18,3 +18,6 @@ Other:
 ## Some examples:
 - [git repo](https://github.com/mzdhr/weather)
 - [another](https://github.com/ChillarAnand/Weather-on-Terminal)
+
+switch-function: <https://www.geeksforgeeks.org/switch-case-in-python-replacement/>
+

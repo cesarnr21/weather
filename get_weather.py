@@ -13,12 +13,15 @@ def create_target():
     if len(args) == 0:
         get_ip_location()
     else:
-        commands = {
-            "--help": help,
-            "--config": config,
-        }
+        def command_select(args):
+            commands = {
+                help : "--help",
+                config : "--config",
+            }
 
-        pass # switch-function: https://www.geeksforgeeks.org/switch-case-in-python-replacement/
+            return commands.get(args, "Unknown Command, available commands: --help and --config")
+
+        pass # 
     pass
 
 def get_ip_location(target):

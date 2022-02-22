@@ -1,10 +1,4 @@
 
-# need to find API
-# find the location, maybe using IP address, or find a way to get location
-# figure out a way to add options when calling the python scrip
-
-from ipaddress import ip_address
-from re import I
 import sys
 import configparser
 import urllib
@@ -15,37 +9,58 @@ def create_target():
     args = sys.argv
     args.pop(0)
     if len(args) == 0:
-        get_ip_location()
+        target = get_ip_location()
     else:
         def command_select(input):
-            commands = {
-                help : "--help",
-                config : "--config",
-            }
+            commands = { "--help" : help,
+                         "--status" : status,
+                         "--config" : config}
 
             return commands.get(input, "Unknown Command, available commands: --help and --config")
         
         command_select(args)
 
         pass
-    pass
+    return target
 
-def get_ip_location(target):
+def get_ip_location():
     """
     In case no location is selected, find the IP address location and use that instead
     """
     url = "http://checkip.dyndns.org"
     ip_address = urllib.urlopen(url).read()
     target = ip_address[-30:-16]
-    print(target)
+    return(target)
 
 
-def get_data(location):
+def get_data(location, api_key):
     """
     Uses API to find weather data for the selected location
     """
-    print(location)
+    api = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid='
+    api_link = api + api_key + str(location)
+    urllib.request.urlopen(api_link)
     pass
+
+def load_config():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    api_key = config.get('DEFAULT', 'api_key')
+    unit = config.get('DEFAULT', 'report_unit')
+    return api_key, unit
+
+def save_config():
+    print("Go to https://openweathermap.org/ and sign up for a free API Key.\n \
+    Afterwards enter it below.")
+    api_key = input("Enter your API Key:")
+
+    # need to make changes to unit selection
+    unit = 'f'
+    config = configparser.ConfigParser()
+    config['DEFAULT'] = {'api_key': api_key,
+                         'report_unit': unit}
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
 
 def print_data():
     print("Weather in <insert location> \nTemperature: \n Temperature Feels Like: ")
@@ -53,7 +68,6 @@ def print_data():
 def main():
     target_location = create_target()
     # target_location = input("Enter either a City or Zip Code to get weather information: ")
-    target_location = get_location(target_location)
     get_data(target_location)
 
     # if there is no location selected use IP function to get location

@@ -21,3 +21,6 @@ Other:
 
 switch-function: <https://www.geeksforgeeks.org/switch-case-in-python-replacement/>
 
+**Config File:**
+- API Key
+- Unit

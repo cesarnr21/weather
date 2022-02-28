@@ -8,30 +8,35 @@ __version__ = '1.0'
 
 def get_ip_location():
     """
-    In case no location is selected, find the IP address location and use that instead
+    Get the users location using the IP address
     """
-    url = "http://checkip.dyndns.org"
-    ip_address = urllib.request.urlopen(url).read()
+    ip_address = urllib.request.urlopen("http://checkip.dyndns.org").read()
     ip_address = ip_address[-30:-16]
-    return(ip_address)
+    ip_address = ip_address.decode("utf-8")
+    print("IP Address is: " + ip_address)
+
+    global location_data
+    location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address).read()
+    print(location_data)
 
 
-def get_data(location, api_key, unit):
+def get_data(location, info):
     """
     Uses API to find weather data for the selected location
     """
     api = 'http://api.openweathermap.org/data/2.5/forecast?id=524901&appid='
-    api_link = api + api_key + str(location) + unit
+    api_link = api + info[0] + str(location) + info[1]
     urllib.request.urlopen(api_link)
     pass
 
+# add if config file is not created then call on save_config. also look at int-str
 def load_config():
     config = configparser.ConfigParser()
     config.read('config.ini')
     api_key = config.get('DEFAULT', 'api_key')
     unit = config.get('DEFAULT', 'report_unit')
     info = [api_key, unit]
-    return info
+    return api_key, unit;
 
 def save_config():
     print("Go to https://openweathermap.org/ and sign up for a free API Key.\n \
@@ -46,14 +51,14 @@ def save_config():
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
 
-def print_data():
+def display_data():
     print("Weather in <insert location> \nTemperature: \n Temperature Feels Like: ")
 
-def create_task():
+def select_task():
     args = sys.argv
     args.pop(0)
     if len(args) == 0:
-        target = get_ip_location()
+        get_ip_location()
     else:
         def command_select(input):
             def help():
@@ -77,12 +82,12 @@ def create_task():
             return commands.get(input, "Unknown Command, available commands: --help --config")
 
         command_select(args)
-    return target
 
 def main():
-    target_location = create_task()
+    select_task()
     # target_location = input("Enter either a City or Zip Code to get weather information: ")
-    get_data(target_location, load_config())
+    get_data(location_data, load_config())
+    display_data()
 
     # if there is no location selected use IP function to get location
 

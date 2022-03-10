@@ -1,9 +1,5 @@
 
 {
-    "default" : [
-        {
-            "api_key" : "goes_here",
-            "report_unit" : "f"
-        }
-    ]
+    "api_key" : "goes_here",
+    "report_unit" : "imperial"
 }

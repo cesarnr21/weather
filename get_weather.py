@@ -1,6 +1,4 @@
 
-import sys
-import configparser
 import json
 import urllib.request
 
@@ -65,6 +63,7 @@ def select_task():
                 exit(0)
 
             def status():
+                # this needs new edits
                 info = load_config()
                 print("API Key in file is " + info[0])
                 exit(0)

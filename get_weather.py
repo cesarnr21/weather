@@ -1,15 +1,16 @@
 
+import sys
 import json
 import urllib.request
 
-__version__ = '1.0'
+__version__ = 'under_development'
 
 def get_ip_location():
     """
     Get the users location using the IP address
     """
     ip_address = urllib.request.urlopen("http://checkip.dyndns.org").read() 
-    ip_address = ip_address[-29:-16]
+    ip_address = ip_address[-30:-16]
     ip_address = ip_address.decode("utf-8")
     print("IP Address is: " + ip_address)
 
@@ -18,13 +19,12 @@ def get_ip_location():
     location = json.loads(location_data)
     return location
 
-
 def get_data(location, info):
     """
     Uses API to find weather data for the selected location
     """
     api = 'https://api.openweathermap.org/data/2.5/weather?'
-    api_link = api + 'lat=' + location['lat'] + '&lon=' + location['lon'] + 'units=' + \
+    api_link = api + 'lat=' + str(location['lat']) + '&lon=' + str(location['lon']) + '&units=' + \
         info['report_unit'] + '&appid=' + info['api_key']
     weather_data = urllib.request.urlopen(api_link).read()
     weather_data = weather_data.decode("utf-8")
@@ -33,7 +33,8 @@ def get_data(location, info):
 
 # add if config file is not created then call on save_config. also look at int-str
 def load_config():
-    with open('config.json', 'r') as file:
+    with open('testing.json', 'r') as file:
+    #with open('config.json', 'r') as file:
         config = json.load(file)
     return config
 
@@ -48,8 +49,10 @@ def save_config():
         output = json.dump(config, indent = 4)
         file.write(output)
 
-def display_data():
-    print("Weather in <insert location> \nTemperature: \n Temperature Feels Like: ")
+# need find a better wait to format the output
+def display_data(weather):
+    print("Weather in", weather['name'], weather['sys']['country'], \
+        "\nTemperature:", weather['main']['temp'], "F\nFeels Like: ", weather['main']['feels_like'], "F")
 
 def select_task():
     args = sys.argv
@@ -85,8 +88,6 @@ def main():
     select_task()
     weather_data = get_data(get_ip_location(), load_config())
     display_data(weather_data)
-
-    # if there is no location selected use IP function to get location
 
 if __name__ == '__main__':
     main()

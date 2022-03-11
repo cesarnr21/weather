@@ -1,5 +1,4 @@
-
 {
-    "api_key" : "goes_here",
+    "api_key" : "api_key_goes_here",
     "report_unit" : "imperial"
 }

@@ -3,7 +3,7 @@ import sys
 import json
 import urllib.request
 
-__version__ = 'under_development'
+__version__ = '1.0'
 
 def get_ip_location():
     """
@@ -31,22 +31,31 @@ def get_data(location, info):
     weather = json.loads(weather_data)
     return weather
 
-# add if config file is not created then call on save_config. also look at int-str
+# add if config file is not created then call on save_config
 def load_config():
-    with open('testing.json', 'r') as file:
-    #with open('config.json', 'r') as file:
+    """
+    Loads the data from the configuration file
+    """
+    #with open('testing.json', 'r') as file:
+    with open('config.json', 'r') as file:
         config = json.load(file)
     return config
 
 def save_config():
-    print("Go to https://openweathermap.org/ and sign up for a free API Key, \
-    then enter it below.")
-    api_key = input("Enter your API Key:")
-    units = 'imperial' # can also be either standard or metric
-    config = [api_key, units]
+    """
+    Allows the user to 
+    """
+    print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/ \
+        and sign up for a free API Key, then enter it below.")
+    api_key = input("Enter your API Key: ")
+    print("The weather can reported in Farenheit, Celsius, or Kelvin\
+        \nFor Kelvin enter 'standard', Celsius: 'metric', Fahrenheit: 'imperial'")
+    unit = input("Enter desired weather unit: ")
+    #unit = 'imperial' # can also be either standard or metric
+    config = {'api_key' : api_key, 'report_unit' : unit}
     # this still needs more work
     with open('config.json', 'w') as file:
-        output = json.dump(config, indent = 4)
+        output = json.dumps(config, indent = 4)
         file.write(output)
 
 # need find a better wait to format the output
@@ -59,30 +68,23 @@ def select_task():
     args.pop(0)
     if len(args) == 0:
         return None
+    elif args[0] == '--help':
+        print("Help Message and Instructions")
+        exit(0)
+
+    elif args[0] == "--status":
+        info = load_config()
+        print("API Key in file is: " + info['api_key'])
+        print("Weather Data will be reported using " + info['report_unit'] + " units")
+        exit(0)
+
+    elif args[0] == "--config":
+        save_config()
+        exit(0)
+
     else:
-        def command_select(input):
-            def help():
-                print("Help Message and Instructions")
-                exit(0)
-
-            def status():
-                # this needs new edits
-                info = load_config()
-                print("API Key in file is " + info[0])
-                exit(0)
-
-            def config():
-                save_config()
-                exit(0)
-
-            commands = { "--help" : help,
-                         "--status" : status,
-                         "--config" : config,
-            }
-
-            return commands.get(input, "Unknown Command, available commands: --help --config")
-
-        command_select(args)
+        print(args[0], "command not avialable. Try again.")
+        exit(0)
 
 def main():
     select_task()

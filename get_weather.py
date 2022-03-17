@@ -12,7 +12,7 @@ def get_ip_location():
     ip_address = urllib.request.urlopen("http://checkip.dyndns.org").read() 
     ip_address = ip_address[-30:-16]
     ip_address = ip_address.decode("utf-8")
-    print("IP Address is: " + ip_address)
+    print("IP Address: " + ip_address)
 
     location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address).read()
     location_data = location_data.decode("utf-8")
@@ -36,14 +36,14 @@ def load_config():
     """
     Loads the data from the configuration file
     """
-    #with open('testing.json', 'r') as file:
-    with open('config.json', 'r') as file:
+    with open('testing.json', 'r') as file:
+    #with open('config.json', 'r') as file:
         config = json.load(file)
     return config
 
 def save_config():
     """
-    Allows the user to 
+    Allows the user to create and save the file
     """
     print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/ \
         and sign up for a free API Key, then enter it below.")
@@ -61,11 +61,12 @@ def save_config():
 # need find a better wait to format the output
 def display_data(weather):
     print("Weather in", weather['name'], weather['sys']['country'], \
-        "\nTemperature:", weather['main']['temp'], "F\nFeels Like: ", weather['main']['feels_like'], "F")
+        "\nTemperature:", weather['main']['temp'], "F\nFeels Like:", weather['main']['feels_like'], "F")
 
 def select_task():
     args = sys.argv
     args.pop(0)
+    # note: replace the if statements with a class
     if len(args) == 0:
         return None
     elif args[0] == '--help':

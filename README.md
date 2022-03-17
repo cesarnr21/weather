@@ -1,10 +1,12 @@
 # Weather Project
+This script gets weather data from the user's location. The script first uses the user's IP Address and [IP-API](https://ip-api.com/) to get location coordinates and then uses the [OpenWeather API](https://openweathermap.org/api) to get weather data.
 
-## outline:
-
-- Add API support to get weather data from somewhere and real time data from a certain city
-- Have two operation modes:
-	- a default that just uses your IP or location information and pulls up weather data for your city
-	- an option in which you can specify a particular city
+## TO DO:
+- add exceptions for common errors
+	- config file not created
+	- API key not available
+	- any config file issues
+- fix classes
+- fix printing data issues
 - edit images and add all data gained from API
 

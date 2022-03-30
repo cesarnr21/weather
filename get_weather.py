@@ -36,7 +36,7 @@ def load_config():
     """
     Loads the data from the configuration file
     """
-    with open('testing.json', 'r') as file:
+    with open('actual.json', 'r') as file:
     #with open('config.json', 'r') as file:
         config = json.load(file)
     return config

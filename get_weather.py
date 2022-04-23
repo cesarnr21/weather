@@ -121,8 +121,8 @@ def select_task():
 
 def main():
     global settings
-    settings = "actual.json"
-    #settings = "config.json"
+    #settings = "actual.json"
+    settings = "config.json"
     select_task()
     weather_data = get_data(get_ip_location(), load_config())
     display_data(weather_data)

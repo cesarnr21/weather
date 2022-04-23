@@ -6,13 +6,13 @@ import urllib.request
 __version__ = '1.0'
 
 def get_ip_location():
-    ip_address = urllib.request.urlopen("http://checkip.dyndns.org").read() 
-    ip_address = ip_address[-30:-16]
-    ip_address = ip_address.decode("utf-8")
-    print("IP Address: " + ip_address)
-    ip_address = ip_address[1:]
+    response = urllib.request.urlopen("http://checkip.dyndns.org").read()
+    response = response.decode("utf-8")
+    response = response.partition("IP Address: ")
+    ip_address = response[2].partition("<")
+    print("IP Address: ", ip_address[0])
 
-    location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address).read()
+    location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address[0]).read()
     location_data = location_data.decode("utf-8")
     location = json.loads(location_data)
     return location
@@ -72,7 +72,7 @@ def select_task():
 
     elif args[0] == "--status":
         info = load_config()
-        print("API Key in file is: ", info['api_key'])
+        print("API Key in file is:", info['api_key'])
         print("Weather Data will be reported using ", info['report_unit'], "units")
         exit(0)
 
@@ -86,7 +86,7 @@ def select_task():
 
 def main():
     global settings
-    settings = "try.json"
+    settings = "actual.json"
     #settings = "config.json"
     select_task()
     weather_data = get_data(get_ip_location(), load_config())

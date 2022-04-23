@@ -2,30 +2,65 @@
 import sys
 import json
 import urllib.request
+from urllib.error import HTTPError
 
 __version__ = '1.0'
 
 def get_ip_location():
-    response = urllib.request.urlopen("http://checkip.dyndns.org").read()
-    response = response.decode("utf-8")
-    response = response.partition("IP Address: ")
-    ip_address = response[2].partition("<")
-    print("IP Address: ", ip_address[0])
+    try:
+        response = urllib.request.urlopen("http://checkip.dyndns.org").read()
+        response = response.decode("utf-8")
+        response = response.partition("IP Address: ")
+        ip_address = response[2].partition("<")
+        print("IP Address:", ip_address[0])
 
-    location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address[0]).read()
-    location_data = location_data.decode("utf-8")
-    location = json.loads(location_data)
-    return location
+    except HTTPError as error:
+        if error.code == 502:
+            print("Network Error. Please try again")
+
+        else:
+            print("Error not recognized. Here is error HTTTP Error Code: ", error.code)
+
+        exit(0)
+
+    try:
+        location_data = urllib.request.urlopen("http://ip-api.com/json/" + ip_address[0]).read()
+        location_data = location_data.decode("utf-8")
+        location = json.loads(location_data)
+        return location
+
+    except HTTPError as error:
+        if error.code == 502:
+            print("Network Error. Please try again")
+
+        else:
+            print("Error not recognized. Here is error HTTTP Error Code: ", error.code)
+
+        exit(0)
 
 def get_data(location, info):
     api = 'https://api.openweathermap.org/data/2.5/weather?'
     api_link = api + 'lat=' + str(location['lat']) + '&lon=' + str(location['lon']) + '&units=' + \
-        info['report_unit'] + '&appid=' + info['api_key']
+    info['report_unit'] + '&appid=' + info['api_key']
 
-    weather_data = urllib.request.urlopen(api_link).read()
-    weather_data = weather_data.decode("utf-8")
-    weather = json.loads(weather_data)
-    return weather
+    try:
+        weather_data = urllib.request.urlopen(api_link).read()
+        weather_data = weather_data.decode("utf-8")
+        weather = json.loads(weather_data)
+
+        return weather
+
+    except HTTPError as error:
+        if error.code == 502:
+            print("Network Error. Please try again")
+
+        elif error.code == 401:
+            print("OpenWeatherMap declined the request. Use --status option to check API key on file")
+
+        else:
+            print("Error not recognized. Here is error HTTTP Error Code: ", error.code)
+
+        exit(0)
 
 def save_config():
     print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/ \

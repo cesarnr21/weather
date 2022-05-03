@@ -62,7 +62,7 @@ def get_data(location, info):
 
         exit(0)
 
-def save_config():
+def save_config(settings):
     print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/ \
     and sign up for one. Then enter you API key below.")
 
@@ -78,7 +78,7 @@ def save_config():
         output = json.dumps(config, indent = 4)
         file.write(output)
 
-def load_config():
+def load_config(settings):
     try:
         with open(settings, 'r') as file:
             config = json.load(file)
@@ -87,15 +87,15 @@ def load_config():
 
     except FileNotFoundError:
         print("Creating configuration file to store API key and settings\n")
-        save_config()
-        load_config()
+        save_config(settings)
+        load_config(settings)
 
 # need find a better wait to format the output
 def display_data(weather):
     print("Weather in", weather['name'], weather['sys']['country'], \
         "\nTemperature:", weather['main']['temp'], "F\nFeels Like:", weather['main']['feels_like'], "F")
 
-def select_task():
+def select_task(settings):
     args = sys.argv
     args.pop(0)
     # note: replace the if statements with a class
@@ -106,13 +106,13 @@ def select_task():
         exit(0)
 
     elif args[0] == "--status":
-        info = load_config()
+        info = load_config(settings)
         print("API Key in file is:", info['api_key'])
         print("Weather Data will be reported using ", info['report_unit'], "units")
         exit(0)
 
     elif args[0] == "--config":
-        save_config()
+        save_config(settings)
         exit(0)
 
     else:
@@ -120,11 +120,10 @@ def select_task():
         exit(0)
 
 def main():
-    global settings
-    #settings = "actual.json"
+    #settings = "testing.json"
     settings = "config.json"
-    select_task()
-    weather_data = get_data(get_ip_location(), load_config())
+    select_task(settings)
+    weather_data = get_data(get_ip_location(), load_config(settings))
     display_data(weather_data)
 
 if __name__ == '__main__':

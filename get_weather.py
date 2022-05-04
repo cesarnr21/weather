@@ -107,8 +107,9 @@ def select_task(settings):
 
     elif args[0] == "--status":
         info = load_config(settings)
+        print("From File:", settings)
         print("API Key in file is:", info['api_key'])
-        print("Weather Data will be reported using ", info['report_unit'], "units")
+        print("Weather Data will be reported using", info['report_unit'], "units")
         exit(0)
 
     elif args[0] == "--config":
@@ -120,7 +121,6 @@ def select_task(settings):
         exit(0)
 
 def main():
-    #settings = "testing.json"
     settings = "config.json"
     select_task(settings)
     weather_data = get_data(get_ip_location(), load_config(settings))

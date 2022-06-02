@@ -1,10 +1,10 @@
 
+from distutils.command.config import config
 import sys
 import json
 import urllib.request
 from urllib.error import HTTPError
 
-__version__ = '1.0'
 
 def get_ip_location():
     try:
@@ -38,6 +38,7 @@ def get_ip_location():
 
         exit(0)
 
+
 def get_data(location, info):
     api = 'https://api.openweathermap.org/data/2.5/weather?'
     api_link = api + 'lat=' + str(location['lat']) + '&lon=' + str(location['lon']) + '&units=' + \
@@ -55,16 +56,18 @@ def get_data(location, info):
             print("Network Error. Please try again")
 
         elif error.code == 401:
-            print("OpenWeatherMap declined the request. Use --status option to check API key on file")
+            print("OpenWeatherMap declined the request. Use '--status' option to check API key on file" \
+                + "or '--help' to see instructions")
 
         else:
             print("Error not recognized. Here is error HTTTP Error Code: ", error.code)
 
         exit(0)
 
+
 def save_config(settings):
-    print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/ \
-    and sign up for one. Then enter you API key below.")
+    print("If you do not have an API key for OpenWeather then go to https://openweathermap.org/" \
+    + " and sign up for one. Then enter you API key below.")
 
     api_key = input("Enter your API Key: ")
     print("The weather can reported in Farenheit, Celsius, or Kelvin\
@@ -78,6 +81,7 @@ def save_config(settings):
         output = json.dumps(config, indent = 4)
         file.write(output)
 
+
 def load_config(settings):
     try:
         with open(settings, 'r') as file:
@@ -90,19 +94,26 @@ def load_config(settings):
         save_config(settings)
         load_config(settings)
 
+
 # need find a better wait to format the output
 def display_data(weather):
     print("Weather in", weather['name'], weather['sys']['country'], \
         "\nTemperature:", weather['main']['temp'], "F\nFeels Like:", weather['main']['feels_like'], "F")
 
+
 def select_task(settings):
     args = sys.argv
     args.pop(0)
-    # note: replace the if statements with a class
     if len(args) == 0:
         return None
     elif args[0] == '--help':
-        print("Help Message and Instructions")
+        print("Help Message and Instructions:")
+        print("This is a Weather Utility. If you do not have an API key for OpenWeather then go to " \
+        + "https://openweathermap.org/ and sign up for one.")
+        print("To add your API Key and Configure your unit settings run 'python get_weather.py --config'")
+        print("\nThank you to these free services that made this project possible:\n" \
+        + "OpenWeather Map API: https://openweathermap.org/api\n" + "IP-API: https://ip-api.com/\n" \
+        + "checkip: http://checkip.dyndns.org/")
         exit(0)
 
     elif args[0] == "--status":
@@ -117,14 +128,20 @@ def select_task(settings):
         exit(0)
 
     else:
-        print(args[0], "The argument was not recognized. Try again.")
+        print("The argument was not recognized. Try again.")
+        print("arguments available:")
+        print("Use '--help' to show intructions on using this utility\n" \
+                + "Use '--config' to add an API key and configure the settings on file\n" \
+                + "Use '--status' to check the current API key and settings on file")
         exit(0)
 
+
 def main():
-    settings = "config.json"
+    settings = "backup.json"
     select_task(settings)
     weather_data = get_data(get_ip_location(), load_config(settings))
     display_data(weather_data)
+
 
 if __name__ == '__main__':
     main()
